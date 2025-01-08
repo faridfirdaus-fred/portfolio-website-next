@@ -8,8 +8,7 @@ const roboto = Roboto({
   weight: ["400", "700"],
 });
 
-export const outfit = 
-Outfit({
+const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -27,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>
+      <body className={`${roboto.variable} ${outfit.variable} antialiased`}>
         {children}
       </body>
     </html>
