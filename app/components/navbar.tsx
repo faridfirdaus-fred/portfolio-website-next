@@ -1,39 +1,45 @@
-"use client"
+"use client";
 
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { FaBars } from "react-icons/fa"; // Import the hamburger icon
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolling, setScrolling] = useState(false);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
+  // Effect for detecting scroll and changing the scrolling state
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolling(true);
+      } else {
+        setScrolling(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+  }, []);
+
   return (
-    <nav className="bg-background text-gray-800 fixed w-full z-10">
+    <nav
+      className={`${
+        scrolling ? "bg-primary text-secondary" : "bg-secondary text-primary"
+      } fixed w-full z-50 top-0 transition-all duration-300 ease-in-out`}
+    >
       {/* Mobile Toggle Button */}
-      <div className="flex items-center justify-between px-4 py-3 md:hidden border">
+      <div className="flex items-center justify-between px-4 py-4 md:hidden">
         <button
           onClick={toggleSidebar}
-          className="text-primary focus:outline-none focus:ring-2 focus:ring-gray-600"
+          className="text-primary bg-secondary focus:outline-none focus:ring-2 focus:ring-gray-600"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          <FaBars className="w-6 h-6" /> {/* Use the React icon */}
         </button>
       </div>
 
@@ -41,7 +47,7 @@ const Navbar: React.FC = () => {
       <div
         className={`${
           isOpen ? "block" : "hidden"
-        } md:hidden bg-gray-800 text-white space-y-2 px-4 py-2`}
+        } md:hidden bg-primary text-white space-y-2 px-4 py-2`}
       >
         <Link href="/" className="block px-2 py-1 hover:bg-gray-700 rounded">
           Home
@@ -67,45 +73,35 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Navbar (Desktop) */}
-      <div className="border hidden md:flex items-center w-full mx-auto px-4 py-4">
+      <div className="hidden md:flex items-center w-full mx-auto px-4 py-6 z-50">
         <div className="flex items-center justify-between w-11/12 mx-auto">
-          {/* Logo Section */}
+          {/* Section Kiri */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <Image
-          src="/logo.png"
-          alt="Logo"
-          width={100}
-          height={100}
-          className="h-10" // Ensure fixed height here
-          style={{ objectFit: "contain" }} // Ensure correct fitting
-              />
-              <span className="-ml-6 font-semibold text-lg text-primary font-outfit">FARIDFRED</span> {/* Add margin to the left of the text */}
+              <span
+                className={`-ml-6 font-semibold text-xl ${
+                  scrolling ? "text-secondary" : "text-primary"
+                } font-outfit`}
+              >
+                fdiraf77@gmail.com
+              </span>
             </Link>
           </div>
 
-          {/* Navigation Links Section */}
-          <div className="space-x-8 flex items-center mx-auto">
-            <Link href="/" className="hover:text-gray-300">
-              Home
-            </Link>
-            <Link href="/about" className="hover:text-gray-300">
+          {/* Section Kanan */}
+          <div className="space-x-10 flex items-center text-lg font-semibold">
+              <Link href="/" className="hover:scale-105">
+                Home
+              </Link>
+            <Link href="/about" className="hover:scale-105">
               About
             </Link>
-            <Link href="/services" className="hover:text-gray-300">
-              Services
+            <Link href="/work" className="hover:scale-105">
+              Work
             </Link>
-            <Link href="/contact" className="hover:text-gray-300">
+            <Link href="/contact" className="hover:scale-105">
               Contact
             </Link>
-          </div>
-
-          {/* Dark Mode Toggle Section */}
-          <div className="flex items-center">
-            <button className="bg-gray-800 text-white p-2 rounded-full">
-              {/* Example Dark Mode Icon (could be replaced with an actual icon) */}
-              🌙
-            </button>
           </div>
         </div>
       </div>

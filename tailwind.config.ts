@@ -11,7 +11,8 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        primary: "#2b4257",
+        primary: "#201315",
+        secondary: "#E5E4E3",
       },
       fontFamily: {
         outfit: ['"Outfit"', "sans-serif"], // Add the Outfit font here

@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  background-color: #FFFEFC;
+  background-color: #E5E4E3;
   font-family: var(--font-roboto), sans-serif;
+  scroll-behavior: smooth;
 
 }
