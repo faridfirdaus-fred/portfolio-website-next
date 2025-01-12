@@ -1,10 +1,11 @@
 import React from "react";
 
 interface ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "red"; // Tambahkan opsi varian
+  type?: "button" | "submit" | "reset"; // Add type property
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -12,6 +13,7 @@ const Button: React.FC<ButtonProps> = ({
   children,
   className,
   variant = "primary",
+  type = "button",
 }) => {
   // Tentukan kelas dasar berdasarkan varian
   const variantClass =
@@ -21,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`btn ${variantClass} ${className} px-4 py-2 mt-4 rounded-3xl hover:scale-105 transform transition duration-300`}
     >
