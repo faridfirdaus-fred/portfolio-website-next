@@ -58,7 +58,7 @@ const ContactForm = () => {
   return (
     <div
       data-aos="fade-up"
-      className="md:w-6/12 md:mb-20 md:px-28 md:py-10 md:mt-24 mx-auto contact-form bg-white/30 backdrop-blur-md border border-white/20 rounded-3xl shadow-lg"
+      className="md:w-6/12 md:mb-20 w-11/12 mt-14 p-4 md:px-28 md:py-10 md:mt-24 mx-auto contact-form bg-white/30 backdrop-blur-md border border-white/20 rounded-3xl shadow-lg"
     >
       <h2 className="text-2xl text-center font-bold mb-4">Contact Us</h2>
       <form className="space-y-4" onSubmit={handleSubmit}>

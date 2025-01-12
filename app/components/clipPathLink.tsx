@@ -182,7 +182,7 @@ const LinkBox: React.FC<LinkBoxProps> = ({ Icon, href, target, rel }) => {
       onMouseLeave={(e) => {
         handleMouseLeave(e);
       }}
-      className="relative grid h-20 w-full place-content-center sm:h-28 md:h-36"
+      className="relative grid w-full place-content-center h-28 md:h-36"
     >
       <Icon className="text-xl sm:text-3xl lg:text-4xl" />
 

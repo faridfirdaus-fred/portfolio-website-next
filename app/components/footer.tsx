@@ -123,11 +123,6 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/about" className="opacity-80 hover:opacity-100">
-                About
-              </Link>
-            </li>
-            <li>
               <Link href="/work" className="opacity-80 hover:opacity-100">
                 Work
               </Link>

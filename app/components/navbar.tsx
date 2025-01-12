@@ -56,10 +56,10 @@ const Navbar: React.FC = () => {
           Home
         </Link>
         <Link
-          href="/services"
+          href="/work"
           className="block px-2 py-1 hover:bg-gray-700 rounded"
         >
-          Services
+          Work
         </Link>
         <Link
           href="/contact"

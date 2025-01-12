@@ -5,9 +5,9 @@ import { useInView } from "react-intersection-observer";
 
 // Daftar teks untuk animasi scrolling
 const texts = [
-"Why did you choose web development? - I chose web development because it allows me to create interactive and dynamic applications that can reach a wide audience.",
-"What projects have you worked on? - I have worked on various projects including e-commerce websites, personal blogs, and portfolio websites using technologies like React, Next.js, and TailwindCSS.",
-"What are your future learning goals? - My future learning goals include diving deeper into backend development, exploring AI and Machine Learning, and mastering full-stack development."
+  "Why did you choose web development? - I chose web development because it allows me to create interactive and dynamic applications that can reach a wide audience.",
+  "What projects have you worked on? - I have worked on various projects including e-commerce websites, personal blogs, and portfolio websites using technologies like React, Next.js, and TailwindCSS.",
+  "What are your future learning goals? - My future learning goals include diving deeper into backend development, exploring AI and Machine Learning, and mastering full-stack development.",
 ];
 
 // Komponen utama
@@ -40,14 +40,14 @@ const Faq = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen md:mt-44 flex flex-col items-center justify-start mx-auto bg-background md:py-40 relative">
+    <div className="w-full mt-10 md:mt-20 flex flex-col items-center justify-start mx-auto bg-background pt-20 md:py-40 relative">
       {/* Judul FAQ */}
       <div className="absolute top-8 w-full text-center" data-aos="fade-right">
         <h1 className="text-2xl md:text-3xl font-bold text-primary">FAQ</h1>
       </div>
 
       {/* Section Konten */}
-      <div className="flex w-full h-full py-0 md:items-center mt-20 md:mt-8 justify-center">
+      <div className="flex w-full py-0 md:items-center mt-10 md:mt-4 justify-center">
         {/* Bagian Kiri */}
         <div className="md:w-8/12 w-full text-left space-y-8 font-semibold px-4 md:px-10 md:space-y-20">
           {texts.map((text, index) => (
@@ -79,7 +79,6 @@ const Faq = () => {
       </div>
     </div>
   );
-
 };
 
 // Komponen untuk setiap teks
