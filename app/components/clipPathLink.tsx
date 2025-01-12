@@ -110,25 +110,37 @@ const EXIT_KEYFRAMES = {
   right: [NO_CLIP, BOTTOM_LEFT_CLIP],
 };
 
-const LinkBox = ({ Icon, href, target, rel }) => {
+interface LinkBoxProps {
+  Icon: React.ComponentType<{ className?: string }>;
+  href: string;
+  target: string;
+  rel: string;
+}
+
+const LinkBox: React.FC<LinkBoxProps> = ({ Icon, href, target, rel }) => {
   const [scope, animate] = useAnimate();
 
-  const getNearestSide = (e) => {
-    const box = e.target.getBoundingClientRect();
+  interface Proximity {
+    proximity: number;
+    side: keyof typeof ENTRANCE_KEYFRAMES;
+  }
 
-    const proximityToLeft = {
+  const getNearestSide = (e: React.MouseEvent<HTMLAnchorElement>): keyof typeof ENTRANCE_KEYFRAMES => {
+    const box = (e.target as HTMLElement).getBoundingClientRect();
+
+    const proximityToLeft: Proximity = {
       proximity: Math.abs(box.left - e.clientX),
       side: "left",
     };
-    const proximityToRight = {
+    const proximityToRight: Proximity = {
       proximity: Math.abs(box.right - e.clientX),
       side: "right",
     };
-    const proximityToTop = {
+    const proximityToTop: Proximity = {
       proximity: Math.abs(box.top - e.clientY),
       side: "top",
     };
-    const proximityToBottom = {
+    const proximityToBottom: Proximity = {
       proximity: Math.abs(box.bottom - e.clientY),
       side: "bottom",
     };
@@ -143,7 +155,7 @@ const LinkBox = ({ Icon, href, target, rel }) => {
     return sortedProximity[0].side;
   };
 
-  const handleMouseEnter = (e) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const side = getNearestSide(e);
 
     animate(scope.current, {
@@ -151,7 +163,7 @@ const LinkBox = ({ Icon, href, target, rel }) => {
     });
   };
 
-  const handleMouseLeave = (e) => {
+  const handleMouseLeave = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const side = getNearestSide(e);
 
     animate(scope.current, {

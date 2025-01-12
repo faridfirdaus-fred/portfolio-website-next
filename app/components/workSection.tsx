@@ -1,6 +1,7 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const WorkSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -50,18 +51,17 @@ const WorkSection = () => {
   };
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId: NodeJS.Timeout | undefined;
     if (isTransitioning) {
       timeoutId = setTimeout(() => {
         setIsTransitioning(false);
-      }, 1000); // Increased duration for smoother transition
+      }, 1200); // Increased duration for smoother transition
     }
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [isTransitioning]);
 
-  // Calculate indices with circular looping
   const prevIndex = (currentIndex - 1 + works.length) % works.length;
   const nextIndex = (currentIndex + 1) % works.length;
 
@@ -69,18 +69,22 @@ const WorkSection = () => {
     <section
       id="work"
       className="p mt-28 font-semibold py-10 w-full mx-auto h-full text-center"
-      data-aos="fade-up"
-      data-aos-anchor-placement="top-bottom"
     >
       <h2 className="text-2xl font-bold mb-4">Recent Projects</h2>
       <div className="relative mx-auto overflow-hidden max-w-full">
         <div className="w-full flex justify-center items-center space-x-4">
-          <a
+          <motion.a
             href={works[prevIndex].url}
             target="_blank"
             rel="noopener noreferrer"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: isTransitioning ? 0 : 0.5, x: isTransitioning ? -100 : 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ duration: 1 }}
             className={`w-full px-2 text-center transition-transform duration-1000 ease-in-out
-              z-10 scale-75 opacity-50 ${isTransitioning ? "-translate-x-full" : "translate-x-0"}
+              z-10 scale-75 opacity-50 ${
+                isTransitioning ? "-translate-x-full" : "translate-x-0"
+              }
             `}
           >
             <Image
@@ -90,13 +94,19 @@ const WorkSection = () => {
               height={500}
               className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
             />
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href={works[currentIndex].url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`w-full px-2 text-center transition-transform duration-1000 ease-in-out
-              z-20 scale-100 opacity-100 ${isTransitioning ? "translate-x-0" : "translate-x-0"}
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ duration: 1 }}
+            className={` w-full px -2 text-center transition-transform duration-1000 ease-in-out
+              z-20 scale-100 opacity-100 ${
+                isTransitioning ? "translate-x-0" : "translate-x-0"
+              }
             `}
           >
             <Image
@@ -107,17 +117,27 @@ const WorkSection = () => {
               className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
             />
             <div className="text-center h-32 overflow-auto">
-              <h3 className="text-xl font-semibold">{works[currentIndex].title}</h3>
+              <h3 className="text-xl font-semibold">
+                {works[currentIndex].title}
+              </h3>
               <p className="text-gray-600">{works[currentIndex].subtitle}</p>
-              <p className="text-gray-500 mt-2">{works[currentIndex].description}</p>
+              <p className="text-gray-500 mt-2">
+                {works[currentIndex].description}
+              </p>
             </div>
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href={works[nextIndex].url}
             target="_blank"
             rel="noopener noreferrer"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: isTransitioning ? 0 : 0.5, x: isTransitioning ? 100 : 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            transition={{ duration: 1 }}
             className={`w-full px-2 text-center transition-transform duration-1000 ease-in-out
-              z-10 scale-75 opacity-50 ${isTransitioning ? "translate-x-full" : "translate-x-0"}
+              z-10 scale-75 opacity-50 ${
+                isTransitioning ? "translate-x-full" : "translate-x-0"
+              }
             `}
           >
             <Image
@@ -127,7 +147,7 @@ const WorkSection = () => {
               height={500}
               className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
             />
-          </a>
+          </motion.a>
         </div>
         <button
           onClick={handlePrev}
