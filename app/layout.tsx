@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 
+
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],

@@ -27,11 +27,14 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll); // Cleanup event listener
   }, []);
 
+  const primaryColor = scrolling
+    ? "bg-primary text-secondary"
+    : "bg-secondary text-primary";
+  const toggleColor = isOpen ? "bg-secondary text-primary" : primaryColor;
+
   return (
     <nav
-      className={`${
-        scrolling ? "bg-primary text-secondary" : "bg-secondary text-primary"
-      } fixed w-full z-50 top-0 transition-all duration-300 ease-in-out`}
+      className={`${toggleColor} fixed w-full z-50 top-0 transition-all duration-300 ease-in-out`}
     >
       {/* Mobile Toggle Button */}
       <div className="flex items-center justify-between px-4 py-4 md:hidden">
@@ -51,12 +54,6 @@ const Navbar: React.FC = () => {
       >
         <Link href="/" className="block px-2 py-1 hover:bg-gray-700 rounded">
           Home
-        </Link>
-        <Link
-          href="/about"
-          className="block px-2 py-1 hover:bg-gray-700 rounded"
-        >
-          About
         </Link>
         <Link
           href="/services"
@@ -88,13 +85,10 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Section Kanan */}
+          {/* Section Tengah */}
           <div className="space-x-10 flex items-center text-lg font-semibold">
-              <Link href="/" className="hover:scale-105">
-                Home
-              </Link>
-            <Link href="/about" className="hover:scale-105">
-              About
+            <Link href="/" className="hover:scale-105">
+              Home
             </Link>
             <Link href="/work" className="hover:scale-105">
               Work
@@ -103,6 +97,7 @@ const Navbar: React.FC = () => {
               Contact
             </Link>
           </div>
+       
         </div>
       </div>
     </nav>

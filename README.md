@@ -20,6 +20,14 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Setting up EmailJS
+
+1. Go to [EmailJS](https://www.emailjs.com/) and sign up for an account.
+2. Create a new email service and note down the `Service ID`.
+3. Create an email template and note down the `Template ID`.
+4. Go to the integration settings and get your `User ID`.
+5. Replace `YOUR_SERVICE_ID`, `YOUR_TEMPLATE_ID`, and `YOUR_USER_ID` in the `contactForm.tsx` file with your actual IDs.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

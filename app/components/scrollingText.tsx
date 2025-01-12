@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -43,9 +44,9 @@ const ScrollingText = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen flex py-0 md:items-center mt-0 md:mt-48 justify-center mx-auto bg-background md:py-40">
+    <div className="w-full h-screen flex flex-col md:flex-row py-0 md:items-center mt-0 md:mt-48 justify-center mx-auto bg-background md:mb-40 md:py-40">
       {/* Bagian Kiri */}
-      <div className="md:w-8/12 w-full text-left space-y-8  font-bold px-4 md:px-10 md:space-y-20">
+      <div className="md:w-8/12 w-full text-left space-y-8 font-bold px-4 md:px-10 md:space-y-20">
         {texts.map((text, index) => (
           <InViewText
             key={index}
@@ -58,7 +59,7 @@ const ScrollingText = () => {
       </div>
 
       {/* Bagian Kanan */}
-      <div className="md:w-4/12 hidden h-full md:flex justify-center items-center">
+      <div className="md:w-4/12 h-full flex justify-center items-center md:mt-0 mt-10">
         {/* GitHub icon moving dynamically */}
         <motion.div
           className="text-9xl text-gray-700 hover:text-primary transition-all"
@@ -101,7 +102,7 @@ const InViewText = ({
 
   useEffect(() => {
     handleInView(index, inView);
-  }, [inView, index, handleInView]);
+  }, [inView, index, handleInView ]);
 
   // Mengatur state animasi berdasarkan index
   const animateState =
@@ -129,4 +130,4 @@ const InViewText = ({
   );
 };
 
-export default ScrollingText;
+export default ScrollingText
