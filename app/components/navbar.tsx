@@ -74,7 +74,12 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between w-11/12 mx-auto">
           {/* Section Kiri */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
+            <Link
+              href="mailto:fdiraf77@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
               <span
                 className={`-ml-6 font-semibold text-xl ${
                   scrolling ? "text-secondary" : "text-primary"
@@ -97,7 +102,6 @@ const Navbar: React.FC = () => {
               Contact
             </Link>
           </div>
-       
         </div>
       </div>
     </nav>
