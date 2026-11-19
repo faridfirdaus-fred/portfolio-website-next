@@ -1,167 +1,227 @@
-"use client"
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion, AnimatePresence } from "framer-motion";
+import { FaGithub, FaExternalLinkAlt, FaShieldAlt, FaCode } from "react-icons/fa";
 
-const WorkSection = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+interface Project {
+  id: string;
+  title: string;
+  category: "all" | "appsec" | "software-engineering" | "fullstack";
+  badge: string;
+  description: string;
+  tags: string[];
+  image?: string;
+  githubUrl?: string;
+  liveUrl?: string;
+}
 
-  const works = [
-    {
-      title: "Calcumat",
-      subtitle: "Calculus Calculator App",
-      image: "/calcumat.png",
-      description:
-        "A Calculus calculator app that provides complex number and determinant calculations, along with quizzes on these topics.",
-      url: "https://faridfirdaus-fred.github.io/calculus-project/",
-    },
-    {
-      title: "Portfolio Website",
-      subtitle: "Portfolio Website Using Tailwind CSS",
-      image: "/portfoliotailwind.png",
-      description:
-        "A Portfolio Website Using Tailwind CSS and Javascript Vanila.",
-      url: "https://faridfirdaus-fred.github.io/portfolio-website",
-    },
-    {
-      title: "Portfolio Website",
-      subtitle: "Portfolio Website Using Tailwind CSS",
-      image: "/portfolio.png",
-      description:
-        "A Portfolio Website Using Tailwind CSS and Javascript Vanila.",
-      url: "https://portfolio-website-next-coral.vercel.app/",
-    },
-  ];
+const projects: Project[] = [
+  {
+    id: "appsec-rbac",
+    title: "Secure Auth & RBAC Microservice",
+    category: "appsec",
+    badge: "AppSec & Defense",
+    description:
+      "Production-ready authentication and role-based access control engine. Features JWT rotation, Redis-backed brute force rate limiting, helmet security headers, and strict OWASP Top 10 mitigation.",
+    tags: ["AppSec", "TypeScript", "Node.js", "Redis", "OWASP", "Docker"],
+    githubUrl: "https://github.com/faridfirdaus-fred",
+    liveUrl: "https://github.com/faridfirdaus-fred",
+  },
+  {
+    id: "calcumat",
+    title: "Calcumat Calculus Computation Engine",
+    category: "software-engineering",
+    badge: "Algorithms & Engine",
+    description:
+      "Interactive mathematical computation platform designed for numerical calculus, complex number transformations, and matrix determinant solving with real-time feedback.",
+    tags: ["Software Engineering", "Algorithms", "JavaScript", "Math Engine"],
+    image: "/calcumat.png",
+    githubUrl: "https://github.com/faridfirdaus-fred/calculus-project",
+    liveUrl: "https://faridfirdaus-fred.github.io/calculus-project/",
+  },
+  {
+    id: "portfolio-next",
+    title: "Tactile Editorial Portfolio Platform",
+    category: "fullstack",
+    badge: "Fullstack & Performance",
+    description:
+      "Personal portfolio platform engineered on Next.js 15 App Router & React 19. Designed for sub-100ms interactions, zero bundle bloat, tactile SVG grain overlay, and 100/100 Lighthouse metrics.",
+    tags: ["Next.js 15", "React 19", "Tailwind CSS", "TypeScript", "Performance"],
+    image: "/portfolio.png",
+    githubUrl: "https://github.com/faridfirdaus-fred/portfolio-website-next",
+    liveUrl: "https://portfolio-website-next-coral.vercel.app/",
+  },
+  {
+    id: "owasp-lab",
+    title: "Web Security Defense Lab & Threat Vectors",
+    category: "appsec",
+    badge: "Security Research",
+    description:
+      "Hands-on demonstration testbed detailing vulnerabilities (SQLi, Stored XSS, SSRF, IDOR) paired with concrete defensive mitigations, input sanitization routines, and architectural hardening.",
+    tags: ["AppSec", "Vulnerability Research", "Threat Modeling", "Secure SDLC"],
+    githubUrl: "https://github.com/faridfirdaus-fred",
+    liveUrl: "https://github.com/faridfirdaus-fred",
+  },
+];
 
-  const handleNext = () => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % works.length);
-    }
-  };
+type CategoryKey = "all" | "appsec" | "software-engineering" | "fullstack";
 
-  const handlePrev = () => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? works.length - 1 : prevIndex - 1
-      );
-    }
-  };
+const categoryFilters: { key: CategoryKey; label: string }[] = [
+  { key: "all", label: "All Projects" },
+  { key: "appsec", label: "AppSec & Defense" },
+  { key: "software-engineering", label: "Software Engineering" },
+  { key: "fullstack", label: "Fullstack & Web" },
+];
 
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
-    if (isTransitioning) {
-      timeoutId = setTimeout(() => {
-        setIsTransitioning(false);
-      }, 1200); // Increased duration for smoother transition
-    }
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [isTransitioning]);
+const WorkSection: React.FC = () => {
+  const [activeFilter, setActiveFilter] = useState<CategoryKey>("all");
 
-  const prevIndex = (currentIndex - 1 + works.length) % works.length;
-  const nextIndex = (currentIndex + 1) % works.length;
+  const filteredProjects =
+    activeFilter === "all"
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
 
   return (
-    <section
-      id="work"
-      className="p mt-28 font-semibold py-10 w-full mx-auto h-full text-center"
-    >
-      <h2 className="text-2xl font-bold mb-4">Recent Projects</h2>
-      <div className="relative mx-auto overflow-hidden max-w-full">
-        <div className="w-full flex justify-center items-center space-x-4">
-          <motion.a
-            href={works[prevIndex].url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: isTransitioning ? 0 : 0.5, x: isTransitioning ? -100 : 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 1 }}
-            className={`w-full px-2 text-center transition-transform duration-1000 ease-in-out
-              z-10 scale-75 opacity-50 ${
-                isTransitioning ? "-translate-x-full" : "translate-x-0"
-              }
-            `}
-          >
-            <Image
-              src={works[prevIndex].image}
-              alt={works[prevIndex].title}
-              width={500}
-              height={500}
-              className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
-            />
-          </motion.a>
-          <motion.a
-            href={works[currentIndex].url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            transition={{ duration: 1 }}
-            className={` w-full px -2 text-center transition-transform duration-1000 ease-in-out
-              z-20 scale-100 opacity-100 ${
-                isTransitioning ? "translate-x-0" : "translate-x-0"
-              }
-            `}
-          >
-            <Image
-              src={works[currentIndex].image}
-              alt={works[currentIndex].title}
-              width={500}
-              height={500}
-              className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
-            />
-            <div className="text-center h-32 overflow-auto">
-              <h3 className="text-xl font-semibold">
-                {works[currentIndex].title}
-              </h3>
-              <p className="text-gray-600">{works[currentIndex].subtitle}</p>
-              <p className="text-gray-500 mt-2">
-                {works[currentIndex].description}
-              </p>
-            </div>
-          </motion.a>
-          <motion.a
-            href={works[nextIndex].url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: isTransitioning ? 0 : 0.5, x: isTransitioning ? 100 : 0 }}
-            exit={{ opacity: 0, x: 100 }}
-            transition={{ duration: 1 }}
-            className={`w-full px-2 text-center transition-transform duration-1000 ease-in-out
-              z-10 scale-75 opacity-50 ${
-                isTransitioning ? "translate-x-full" : "translate-x-0"
-              }
-            `}
-          >
-            <Image
-              src={works[nextIndex].image}
-              alt={works[nextIndex].title}
-              width={500}
-              height={500}
-              className="rounded-2xl bg-white mx-auto mb-4 shadow-lg"
-            />
-          </motion.a>
+    <section id="work" className="w-full max-w-6xl mx-auto px-6 md:px-12 py-8">
+      {/* Header */}
+      <div className="text-left mb-12">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold tracking-wider uppercase mb-3">
+          <FaShieldAlt className="w-3 h-3 text-primary" />
+          <span>Curated Systems &amp; Security Projects</span>
         </div>
-        <button
-          onClick={handlePrev}
-          className="absolute left-1/4 top-1/3 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-600 transition-colors duration-300 z-30"
-        >
-          ◀
-        </button>
-        <button
-          onClick={handleNext}
-          className="absolute right-1/4 top-1/3 transform -translate-y-1/2 bg-gray-800 text-white rounded-full p-3 hover:bg-gray-600 transition-colors duration-300 z-30"
-        >
-          ▶
-        </button>
+        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight font-outfit text-primary">
+          Engineered for Resilience &amp; Scale
+        </h1>
+        <p className="mt-3 text-base sm:text-lg opacity-80 max-w-2xl font-normal leading-relaxed">
+          Exploring the intersection of software architecture, backend performance, and Application Security (AppSec). Each project illustrates secure-by-design principles.
+        </p>
+
+        {/* Filter Tags */}
+        <div className="flex flex-wrap items-center gap-2 mt-8">
+          {categoryFilters.map((filter) => {
+            const isActive = activeFilter === filter.key;
+            return (
+              <button
+                key={filter.key}
+                onClick={() => setActiveFilter(filter.key)}
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all duration-150 cursor-pointer ${
+                  isActive
+                    ? "bg-primary text-secondary shadow-sm"
+                    : "bg-secondary text-primary border border-primary/25 hover:border-primary hover:bg-primary/5"
+                }`}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
+
+      {/* Projects Grid */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project) => (
+            <motion.article
+              layout
+              key={project.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              className="group flex flex-col justify-between rounded-3xl border border-primary/20 bg-[#E5E4E3] p-6 sm:p-8 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200"
+            >
+              <div>
+                {/* Visual Preview / Header Banner */}
+                {project.image ? (
+                  <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden border border-primary/15 bg-white mb-6">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative w-full h-36 rounded-2xl border border-primary/15 bg-primary/5 p-6 mb-6 flex flex-col justify-center items-start">
+                    <div className="p-3 rounded-xl bg-primary text-secondary mb-2">
+                      {project.category === "appsec" ? (
+                        <FaShieldAlt className="w-5 h-5" />
+                      ) : (
+                        <FaCode className="w-5 h-5" />
+                      )}
+                    </div>
+                    <span className="text-xs font-mono font-bold tracking-wider opacity-60">
+                      SECURE ARCHITECTURE SPECIFICATION
+                    </span>
+                  </div>
+                )}
+
+                {/* Badge & Title */}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+                    {project.badge}
+                  </span>
+                </div>
+
+                <h2 className="text-2xl font-bold tracking-tight font-outfit text-primary mb-3">
+                  {project.title}
+                </h2>
+
+                <p className="text-sm sm:text-base opacity-80 leading-relaxed mb-6 font-normal">
+                  {project.description}
+                </p>
+              </div>
+
+              {/* Tags & Action links */}
+              <div>
+                <div className="flex flex-wrap gap-1.5 mb-6">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 rounded-md text-xs font-medium bg-primary/5 text-primary/80 border border-primary/10"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3 pt-4 border-t border-primary/15">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`View live demonstration of ${project.title}`}
+                      className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:opacity-75 transition-opacity py-1.5 px-3 rounded-lg border border-primary/20 bg-primary/5"
+                    >
+                      <FaExternalLinkAlt className="w-3 h-3" />
+                      <span>Live Demo</span>
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`View source code of ${project.title} on GitHub`}
+                      className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-primary hover:opacity-75 transition-opacity py-1.5 px-3 rounded-lg border border-primary/20 hover:bg-primary/5"
+                    >
+                      <FaGithub className="w-3.5 h-3.5" />
+                      <span>Source Code</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };
