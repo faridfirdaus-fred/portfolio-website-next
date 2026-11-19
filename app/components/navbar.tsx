@@ -12,93 +12,106 @@ const Navbar: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  // Effect for detecting scroll and changing the scrolling state
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolling(true);
-      } else {
-        setScrolling(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolling(window.scrollY > 30);
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll); // Cleanup event listener
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const primaryColor = scrolling
-    ? "bg-primary text-secondary"
-    : "bg-secondary text-primary";
-  const toggleColor = isOpen ? "bg-secondary text-primary" : primaryColor;
+  const navClasses = scrolling
+    ? "bg-primary text-secondary shadow-md border-b border-primary/20"
+    : "bg-[#E5E4E3]/85 text-primary backdrop-blur-md border-b border-primary/10";
 
   return (
     <nav
-      className={`${toggleColor} fixed w-full z-50 top-0 transition-all duration-300 ease-in-out`}
+      className={`${navClasses} fixed w-full z-50 top-0 transition-all duration-200 ease-in-out`}
     >
-      {/* Mobile Toggle Button */}
-      <div className="flex items-center justify-between px-4 py-4 md:hidden">
+      {/* Mobile Bar */}
+      <div className="flex items-center justify-between px-6 py-4 md:hidden">
+        <Link
+          href="mailto:faridfirdaus.mail@gmail.com"
+          className="font-outfit font-semibold text-sm truncate max-w-[220px]"
+        >
+          faridfirdaus.mail@gmail.com
+        </Link>
         <button
           onClick={toggleSidebar}
-          className="text-primary bg-secondary focus:outline-none focus:ring-2 focus:ring-gray-600"
+          aria-label="Toggle navigation menu"
+          aria-expanded={isOpen}
+          className="p-2 rounded-lg border border-current/20 focus:outline-none focus:ring-2 focus:ring-current"
         >
-          <FaBars className="w-6 h-6" /> {/* Use the React icon */}
+          <FaBars className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Sidebar (Mobile) */}
-      <div
-        className={`${
-          isOpen ? "block" : "hidden"
-        } md:hidden bg-primary text-white space-y-2 px-4 py-2`}
-      >
-        <Link href="/" className="block px-2 py-1 hover:bg-gray-700 rounded">
-          Home
-        </Link>
-        <Link
-          href="/work"
-          className="block px-2 py-1 hover:bg-gray-700 rounded"
-        >
-          Work
-        </Link>
-        <Link
-          href="/contact"
-          className="block px-2 py-1 hover:bg-gray-700 rounded"
-        >
-          Contact
-        </Link>
-      </div>
+      {/* Mobile Drawer */}
+      {isOpen && (
+        <div className="md:hidden bg-primary text-secondary border-t border-secondary/10 px-6 py-4 space-y-3">
+          <Link
+            href="/"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 text-lg font-medium hover:opacity-80 transition-opacity"
+          >
+            Home
+          </Link>
+          <Link
+            href="/work"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 text-lg font-medium hover:opacity-80 transition-opacity"
+          >
+            Work
+          </Link>
+          <Link
+            href="/contact"
+            onClick={() => setIsOpen(false)}
+            className="block py-2 text-lg font-medium hover:opacity-80 transition-opacity"
+          >
+            Contact
+          </Link>
+        </div>
+      )}
 
-      {/* Navbar (Desktop) */}
-      <div className="hidden md:flex items-center w-full mx-auto px-4 py-6 z-50">
+      {/* Desktop Navbar */}
+      <div className="hidden md:flex items-center w-full px-8 py-5">
         <div className="flex items-center justify-between w-11/12 mx-auto">
-          {/* Section Kiri */}
+          {/* Email / Brand */}
           <div className="flex items-center">
             <Link
-              href="mailto:fdiraf77@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center"
+              href="mailto:faridfirdaus.mail@gmail.com"
+              className="font-semibold text-lg font-outfit hover:opacity-80 transition-opacity"
             >
-              <span
-                className={`-ml-6 font-semibold text-xl ${
-                  scrolling ? "text-secondary" : "text-primary"
-                } font-outfit`}
-              >
-                fdiraf77@gmail.com
-              </span>
+              faridfirdaus.mail@gmail.com
             </Link>
           </div>
 
-          {/* Section Tengah */}
-          <div className="space-x-10 flex items-center text-lg font-semibold">
-            <Link href="/" className="hover:scale-105">
+          {/* Nav links */}
+          <div className="space-x-8 flex items-center text-base font-semibold tracking-wide">
+            <Link
+              href="/"
+              className="hover:opacity-75 transition-opacity px-2 py-1"
+            >
               Home
             </Link>
-            <Link href="/work" className="hover:scale-105">
+            <Link
+              href="/work"
+              className="hover:opacity-75 transition-opacity px-2 py-1"
+            >
               Work
             </Link>
-            <Link href="/contact" className="hover:scale-105">
+            <Link
+              href="/contact"
+              className="hover:opacity-75 transition-opacity px-2 py-1"
+            >
               Contact
             </Link>
           </div>

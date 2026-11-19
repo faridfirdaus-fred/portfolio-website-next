@@ -1,12 +1,16 @@
-import React from "react";
+import type { Metadata } from "next";
 import WorkSection from "../components/workSection";
 
-const Page: React.FC = () => {
-  return (
-    <div className="container mx-auto">
-     <WorkSection />
-    </div>
-  );
+export const metadata: Metadata = {
+  title: "Work & Projects | Farid Firdaus",
+  description:
+    "Explore software engineering, backend architecture, and application security projects built by Farid Firdaus.",
 };
 
-export default Page;
+export default function WorkPage() {
+  return (
+    <main className="min-h-screen pt-24 pb-20">
+      <WorkSection />
+    </main>
+  );
+}

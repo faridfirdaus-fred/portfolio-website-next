@@ -1,52 +1,61 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import { FaGithub } from "react-icons/fa";
 
-// Daftar teks untuk animasi scrolling
+// 5 pilar fokus Software Engineering & Application Security
 const texts = [
-  "I am Passionate to Learn About Development, especially Web Development",
-  "Now, I usually use JavaScript to create an interactive website, I use Next.js as Framework of React.js and TailwindCSS as CSS Framework",
-  "Not only that, I also learn about Backend Development, I use Node.js and Express.js to create a RESTful API",
-  "I also interested to learn php, especially Laravel Framework",
-  "It is also possible that I will learn about AI and Machine Learning in the future"
+  "Architecting robust backend services & resilient fullstack applications with security-first design.",
+  "Bridging modern software development with Application Security (AppSec) to harden systems across the SDLC.",
+  "Engineering scalable APIs, high-throughput microservices, and modern web architectures with TypeScript and Node.js.",
+  "Defending systems against OWASP Top 10 vulnerabilities through threat modeling, security audits, and defensive programming.",
+  "Deeply committed to system reliability, vulnerability research, and building dependable digital infrastructure."
 ];
 
 // Komponen utama
 const ScrollingText = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [scrollX, setScrollX] = useState(100); // Initial position on the right (100%)
-  const [rotateDeg, setRotateDeg] = useState(0); // State to track rotation
+  const [scrollX, setScrollX] = useState(40);
+  const [rotateDeg, setRotateDeg] = useState(0);
 
-  // Fungsi untuk mengatur elemen yang sedang terlihat
   const handleInView = (index: number, inView: boolean) => {
     if (inView) setActiveIndex(index);
   };
 
-  // Track scroll and update scroll position
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollPos = window.scrollY; // Get vertical scroll position
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight; // Maximum scroll
-      const scrollFraction = scrollPos / maxScroll; // Fraction of the scroll
-      const newX = 100 - scrollFraction * 100; // Adjust position based on scroll
-      const newRotate = scrollFraction * 10; // Adjust rotation based on scroll (10 degrees max)
-
-      setScrollX(newX); // Update the position
-      setRotateDeg(newRotate); // Update the rotation
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPos = window.scrollY;
+          const maxScroll = Math.max(
+            1,
+            document.documentElement.scrollHeight - window.innerHeight
+          );
+          const scrollFraction = Math.min(1, Math.max(0, scrollPos / maxScroll));
+          setScrollX(40 - scrollFraction * 40);
+          setRotateDeg(scrollFraction * 12);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll); // Clean up event listener
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="w-full h-screen flex flex-col md:flex-row py-0 md:items-center mt-0 md:mt-48 justify-center mx-auto bg-background md:mb-40 md:py-40">
-      {/* Bagian Kiri */}
-      <div className="md:w-8/12 w-full text-left space-y-8 font-bold px-4 md:px-10 md:space-y-20">
+    <div className="w-full min-h-screen flex flex-col md:flex-row py-12 md:items-center mt-12 md:mt-24 justify-center mx-auto max-w-6xl px-6 md:px-12 md:mb-28">
+      {/* Bagian Kiri: Manifesto Focus */}
+      <div className="md:w-8/12 w-full text-left space-y-10 md:space-y-16">
+        <div className="inline-block">
+          <p className="text-xs uppercase tracking-widest font-bold opacity-60 mb-1">
+            Core Engineering Philosophy
+          </p>
+          <div className="h-0.5 w-16 bg-primary/40 rounded-full" />
+        </div>
         {texts.map((text, index) => (
           <InViewText
             key={index}
@@ -58,25 +67,28 @@ const ScrollingText = () => {
         ))}
       </div>
 
-      {/* Bagian Kanan */}
-      <div className="md:w-4/12 h-full flex justify-center items-center md:mt-0 mt-10">
-        {/* GitHub icon moving dynamically */}
+      {/* Bagian Kanan: GitHub Link Badge */}
+      <div className="md:w-4/12 h-full flex flex-col justify-center items-center mt-16 md:mt-0">
         <motion.div
-          className="text-9xl text-gray-700 hover:text-primary transition-all"
+          className="text-7xl md:text-8xl text-primary/70 hover:text-primary transition-colors p-6 rounded-3xl border border-primary/10 bg-primary/5 shadow-sm hover:shadow-md"
           style={{
-            transform: `translateX(${scrollX}%) rotate(${rotateDeg}deg)`, // Dynamically move and rotate based on scroll
-            transition: "transform 0.5s ease-out", // Smooth transition for movement
+            transform: `translateX(${scrollX}px) rotate(${rotateDeg}deg)`,
+            transition: "transform 0.2s ease-out",
           }}
         >
           <a
             href="https://github.com/faridfirdaus-fred"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-9xl"
+            aria-label="Visit Farid Firdaus on GitHub"
+            className="block text-current focus:outline-none focus:ring-2 focus:ring-primary rounded-2xl"
           >
             <FaGithub />
           </a>
         </motion.div>
+        <p className="mt-4 text-xs tracking-wider uppercase opacity-60 font-semibold font-outfit">
+          Explore Code on GitHub
+        </p>
       </div>
     </div>
   );
@@ -96,13 +108,12 @@ const InViewText = ({
   handleInView,
   text,
 }: InViewTextProps) => {
-  const [ref, inView] = useInView({
-    threshold: 0.5, // Terlihat 50% di viewport
-  });
+  const ref = useRef<HTMLParagraphElement>(null);
+  const inView = useInView(ref, { amount: 0.5 });
 
   useEffect(() => {
     handleInView(index, inView);
-  }, [inView, index, handleInView ]);
+  }, [inView, index, handleInView]);
 
   // Mengatur state animasi berdasarkan index
   const animateState =
@@ -113,20 +124,20 @@ const InViewText = ({
       : "hidden";
 
   return (
-    <motion.h1
+    <motion.p
       ref={ref}
       initial="hidden"
       animate={animateState}
       variants={{
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0.2, y: 12 },
         visible: { opacity: 1, y: 0 },
-        inactive: { opacity: 0.5, y: 0 },
+        inactive: { opacity: 0.45, y: 0 },
       }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      className="text-xl md:text-5xl md:pl-14"
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight font-outfit text-primary"
     >
       {text}
-    </motion.h1>
+    </motion.p>
   );
 };
 

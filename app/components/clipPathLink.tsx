@@ -5,22 +5,23 @@ import {
   SiFacebook,
   SiGithub,
   SiInstagram,
-  SiLinkedin,
-  SiMailboxdotorg,
   SiReddit,
-  SiTiktok,
   SiX,
 } from "react-icons/si";
+import { FaLinkedin, FaEnvelope } from "react-icons/fa";
 import { useAnimate } from "framer-motion";
 
 export const ClipPathLink = () => {
   return (
     <div className="bg-secondary md:mt-24 px-4 py-12">
-      <div className="mx-auto max-w-7xl">
-        <div>
-          <h1 data-aos="fade-right" className="text-center mb-2 text-3xl font-semibold py-5">
-            Social Media
-          </h1>
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center mb-8">
+          <p className="text-xs uppercase tracking-widest font-bold opacity-60 mb-1">
+            Network &amp; Profiles
+          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight font-outfit">
+            Social &amp; Channels
+          </h2>
         </div>
         <ClipPathLinks />
       </div>
@@ -30,61 +31,61 @@ export const ClipPathLink = () => {
 
 const ClipPathLinks = () => {
   return (
-    <div className="divide-y divide-primary border border-primary">
-      <div className="grid grid-cols-2 divide-x divide-neutral-900">
+    <div className="divide-y divide-primary border border-primary bg-secondary shadow-sm">
+      <div className="grid grid-cols-2 divide-x divide-primary">
         <LinkBox
-          Icon={SiMailboxdotorg}
+          Icon={FaEnvelope}
           target="_blank"
           rel="noopener noreferrer"
-          href="mailto:fdiraf77@gmail.com"
+          href="mailto:faridfirdaus.mail@gmail.com"
+          label="Send email to faridfirdaus.mail@gmail.com"
         />
-        <LinkBox
-          target="_blank"
-          rel="noopener noreferrer"
-          Icon={SiLinkedin}
-          href="https://www.linkedin.com/in/farid-firdaus/"
-        />
-      </div>
-      <div className="grid grid-cols-4 divide-x divide-neutral-900">
         <LinkBox
           target="_blank"
           rel="noopener noreferrer"
           Icon={SiGithub}
           href="https://github.com/faridfirdaus-fred"
-        />
-        <LinkBox
-          target="_blank"
-          rel="noopener noreferrer"
-          Icon={SiTiktok}
-          href="https://www.tiktok.com/@riddd.fir"
-        />
-        <LinkBox
-          target="_blank"
-          rel="noopener noreferrer"
-          Icon={SiInstagram}
-          href="https://www.instagram.com/riddd.fir/"
-        />
-        <LinkBox
-          target="_blank"
-          rel="noopener noreferrer"
-          Icon={SiFacebook}
-          href="https://www.facebook.com/farid.forster.5/"
+          label="Farid Firdaus on GitHub"
         />
       </div>
-      <div className="grid grid-cols-2 divide-x divide-neutral-900">
+      <div className="grid grid-cols-3 divide-x divide-primary">
         <LinkBox
           target="_blank"
           rel="noopener noreferrer"
-          Icon={SiReddit}
-          href="https://www.reddit.com/user/Miserable-Yard4496/"
+          Icon={FaLinkedin}
+          href="https://www.linkedin.com/in/farid-firdaus/"
+          label="Farid Firdaus on LinkedIn"
         />
         <LinkBox
           target="_blank"
           rel="noopener noreferrer"
           Icon={SiX}
-          href="https://x.com/faredrid"
+          href="https://x.com/freddem4rco"
+          label="Farid Firdaus on X"
         />
-       
+        <LinkBox
+          target="_blank"
+          rel="noopener noreferrer"
+          Icon={SiInstagram}
+          href="https://www.instagram.com/rid.fir"
+          label="Farid Firdaus on Instagram"
+        />
+      </div>
+      <div className="grid grid-cols-2 divide-x divide-primary">
+        <LinkBox
+          target="_blank"
+          rel="noopener noreferrer"
+          Icon={SiFacebook}
+          href="https://www.facebook.com/farid.forster.5"
+          label="Farid Fred on Facebook"
+        />
+        <LinkBox
+          target="_blank"
+          rel="noopener noreferrer"
+          Icon={SiReddit}
+          href="https://www.reddit.com/user/Miserable-Yard4496/"
+          label="Farid Firdaus on Reddit"
+        />
       </div>
     </div>
   );
@@ -115,9 +116,10 @@ interface LinkBoxProps {
   href: string;
   target: string;
   rel: string;
+  label: string;
 }
 
-const LinkBox: React.FC<LinkBoxProps> = ({ Icon, href, target, rel }) => {
+const LinkBox: React.FC<LinkBoxProps> = ({ Icon, href, target, rel, label }) => {
   const [scope, animate] = useAnimate();
 
   interface Proximity {
@@ -176,13 +178,14 @@ const LinkBox: React.FC<LinkBoxProps> = ({ Icon, href, target, rel }) => {
       href={href}
       target={target}
       rel={rel}
+      aria-label={label}
       onMouseEnter={(e) => {
         handleMouseEnter(e);
       }}
       onMouseLeave={(e) => {
         handleMouseLeave(e);
       }}
-      className="relative grid w-full place-content-center h-28 md:h-36"
+      className="relative grid w-full place-content-center h-28 md:h-36 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
     >
       <Icon className="text-xl sm:text-3xl lg:text-4xl" />
 
