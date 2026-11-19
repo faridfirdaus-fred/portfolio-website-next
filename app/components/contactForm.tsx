@@ -1,22 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import emailjs from "@emailjs/browser";
 import Button from "./button";
+import { FaEnvelope, FaExternalLinkAlt, FaCopy, FaCheck } from "react-icons/fa";
 
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
     subject: "",
     message: "",
-    _gotcha: "", // Honeypot anti-spam
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<{
-    type: "idle" | "success" | "error";
-    message: string;
-  }>({ type: "idle", message: "" });
+  const [copied, setCopied] = useState(false);
+  const [dispatched, setDispatched] = useState(false);
+
+  const recipientEmail = "faridfirdaus.mail@gmail.com";
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -27,81 +24,62 @@ const ContactForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const getEmailContent = () => {
+    const formattedSubject =
+      formData.subject.trim() || `Inquiry from ${formData.name.trim() || "Website Visitor"}`;
+    const formattedBody = `From: ${formData.name.trim()}\n\n${formData.message.trim()}`;
+    return { formattedSubject, formattedBody };
+  };
+
+  const getMailtoUrl = () => {
+    const { formattedSubject, formattedBody } = getEmailContent();
+    return `mailto:${recipientEmail}?subject=${encodeURIComponent(
+      formattedSubject
+    )}&body=${encodeURIComponent(formattedBody)}`;
+  };
+
+  const getGmailUrl = () => {
+    const { formattedSubject, formattedBody } = getEmailContent();
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${encodeURIComponent(
+      formattedSubject
+    )}&body=${encodeURIComponent(formattedBody)}`;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name.trim() || !formData.message.trim()) return;
 
-    // Silently reject spam bots that fill hidden honeypot
-    if (formData._gotcha) {
-      setStatus({ type: "success", message: "Message dispatched successfully." });
-      setFormData({ name: "", email: "", subject: "", message: "", _gotcha: "" });
-      return;
-    }
+    const mailtoUrl = getMailtoUrl();
+    window.location.href = mailtoUrl;
+    setDispatched(true);
+  };
 
-    setIsSubmitting(true);
-    setStatus({ type: "idle", message: "" });
-
-    try {
-      const emailParams = {
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject || "Portfolio Inquiry",
-        message: formData.message,
-      };
-
-      await emailjs.send(
-        "service_fed5lpw",
-        "template_gbepq5g",
-        emailParams,
-        "CQdaKkJvBqKsiPYJ4"
-      );
-
-      setStatus({
-        type: "success",
-        message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
-      });
-      setFormData({ name: "", email: "", subject: "", message: "", _gotcha: "" });
-    } catch (error) {
-      console.error("EmailJS dispatch error:", error);
-      setStatus({
-        type: "error",
-        message:
-          "Unable to send message via form. Please email directly at faridfirdaus.mail@gmail.com",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleCopyBody = () => {
+    const { formattedSubject, formattedBody } = getEmailContent();
+    const fullText = `Subject: ${formattedSubject}\nTo: ${recipientEmail}\n\n${formattedBody}`;
+    navigator.clipboard.writeText(fullText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
     <div className="w-full rounded-3xl border border-primary/20 bg-[#E5E4E3] p-6 sm:p-8 md:p-10 shadow-sm">
       <div className="mb-6">
         <h2 className="text-2xl font-bold tracking-tight font-outfit text-primary">
-          Send a Message
+          Draft &amp; Send Message
         </h2>
         <p className="text-sm opacity-75 mt-1 font-normal">
-          Inquiries for software development, AppSec audits, or technical consulting.
+          Isi form di bawah untuk membuka dan mengisi otomatis di aplikasi email favoritmu (Gmail, Thunderbird, Outlook, Apple Mail).
         </p>
       </div>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
-        {/* Anti-spam honeypot */}
-        <input
-          type="text"
-          name="_gotcha"
-          value={formData._gotcha}
-          onChange={handleChange}
-          className="hidden"
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
-        />
-
         <div>
           <label
             htmlFor="name"
             className="block text-xs font-bold uppercase tracking-wider opacity-70 mb-1 font-outfit"
           >
-            Your Name <span className="text-red-700">*</span>
+            Nama Lengkap / Instansi <span className="text-red-700">*</span>
           </label>
           <input
             type="text"
@@ -117,35 +95,16 @@ const ContactForm: React.FC = () => {
 
         <div>
           <label
-            htmlFor="email"
-            className="block text-xs font-bold uppercase tracking-wider opacity-70 mb-1 font-outfit"
-          >
-            Email Address <span className="text-red-700">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            placeholder="you@domain.com"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 rounded-xl border border-primary/25 bg-white/70 text-primary placeholder:opacity-40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm transition-all"
-          />
-        </div>
-
-        <div>
-          <label
             htmlFor="subject"
             className="block text-xs font-bold uppercase tracking-wider opacity-70 mb-1 font-outfit"
           >
-            Subject / Topic
+            Subjek / Topik
           </label>
           <input
             type="text"
             id="subject"
             name="subject"
-            placeholder="Fullstack Role / AppSec Collaboration"
+            placeholder="Diskusi Proyek / Tawaran Kolaborasi AppSec"
             value={formData.subject}
             onChange={handleChange}
             className="w-full px-4 py-2.5 rounded-xl border border-primary/25 bg-white/70 text-primary placeholder:opacity-40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm transition-all"
@@ -157,14 +116,14 @@ const ContactForm: React.FC = () => {
             htmlFor="message"
             className="block text-xs font-bold uppercase tracking-wider opacity-70 mb-1 font-outfit"
           >
-            Message <span className="text-red-700">*</span>
+            Pesan <span className="text-red-700">*</span>
           </label>
           <textarea
             id="message"
             name="message"
             rows={5}
             required
-            placeholder="Tell me about your project, timeline, or requirements..."
+            placeholder="Tuliskan detail kebutuhan, proyek, atau pesan kamu di sini..."
             value={formData.message}
             onChange={handleChange}
             className="w-full px-4 py-2.5 rounded-xl border border-primary/25 bg-white/70 text-primary placeholder:opacity-40 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm transition-all resize-y"
@@ -173,25 +132,51 @@ const ContactForm: React.FC = () => {
 
         <Button
           type="submit"
-          disabled={isSubmitting}
           variant="primary"
-          className="w-full mt-2 py-3 text-base"
+          className="w-full mt-2 py-3 text-base flex items-center justify-center gap-2"
         >
-          {isSubmitting ? "Sending Dispatch..." : "Send Message"}
+          <FaEnvelope className="w-4 h-4" />
+          <span>Buka &amp; Kirim di Aplikasi Email</span>
         </Button>
       </form>
 
-      {status.message && (
-        <div
-          role="status"
-          aria-live="polite"
-          className={`mt-4 p-4 rounded-xl text-sm font-medium border ${
-            status.type === "success"
-              ? "bg-emerald-50 text-emerald-900 border-emerald-300"
-              : "bg-red-50 text-red-900 border-red-300"
-          }`}
-        >
-          {status.message}
+      {/* Alternative dispatch links & copied status */}
+      {dispatched && (
+        <div className="mt-5 p-4 rounded-2xl bg-white/80 border border-primary/20 space-y-3">
+          <p className="text-xs sm:text-sm font-semibold text-primary">
+            Aplikasi email default kamu sedang dibuka dengan subjek dan format pesan terisi otomatis!
+          </p>
+          <p className="text-xs opacity-75">
+            Jika aplikasi email lokal belum terpasang atau tidak terbuka, kamu bisa langsung buka di Web Gmail atau salin teks pesan:
+          </p>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <a
+              href={getGmailUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-primary text-secondary hover:opacity-90 transition-opacity"
+            >
+              <FaExternalLinkAlt className="w-3 h-3" />
+              <span>Buka di Web Gmail</span>
+            </a>
+            <button
+              type="button"
+              onClick={handleCopyBody}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-primary/25 bg-secondary text-primary hover:bg-primary/5 transition-colors cursor-pointer"
+            >
+              {copied ? (
+                <>
+                  <FaCheck className="w-3 h-3 text-emerald-600" />
+                  <span>Tersalin!</span>
+                </>
+              ) : (
+                <>
+                  <FaCopy className="w-3 h-3" />
+                  <span>Salin Teks Lengkap</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       )}
     </div>
