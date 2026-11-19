@@ -1,4 +1,4 @@
-# Farid Firdaus — Portfolio Platform
+# Farid Firdaus | Portfolio Platform
 
 Engineering-grade portfolio website showcasing Software Engineering and Application Security (AppSec) focus.
 

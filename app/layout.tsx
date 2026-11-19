@@ -23,7 +23,7 @@ const siteUrl = "https://portfolio-website-next-coral.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Farid Firdaus — Software Engineer & Application Security",
+    default: "Farid Firdaus | Software Engineer & Application Security",
     template: "%s | Farid Firdaus",
   },
   description:
@@ -47,14 +47,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteUrl,
-    title: "Farid Firdaus — Software Engineer & Application Security",
+    title: "Farid Firdaus | Software Engineer & Application Security",
     description:
       "Software Engineer & Application Security (AppSec) researcher focused on resilient distributed backends and defensive web architectures.",
     siteName: "Farid Firdaus Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Farid Firdaus — Software Engineer & Application Security",
+    title: "Farid Firdaus | Software Engineer & Application Security",
     description:
       "Software Engineer & Application Security (AppSec) researcher focused on resilient distributed backends and defensive web architectures.",
     creator: "@freddem4rco",

@@ -33,7 +33,7 @@ const Hero = () => {
           Farid Firdaus
         </h1>
         <p className="mt-2 text-lg sm:text-xl md:text-2xl font-semibold opacity-90 text-primary">
-          Software Engineer &amp; Application Security
+          Software Engineer | Application Security
         </p>
         <p className="mt-4 text-base md:text-lg font-normal leading-relaxed opacity-85 max-w-xl">
           Focusing on robust backend engineering, resilient fullstack systems, and web application security (AppSec). Engineering dependable digital infrastructure with defensive security and OWASP principles baked in.
@@ -86,7 +86,7 @@ const Hero = () => {
           <div className="relative z-10 w-full h-full rounded-3xl overflow-hidden border-2 border-primary/20 shadow-2xl bg-primary/10">
             <Image
               src="/faridhero.webp"
-              alt="Farid Firdaus - Software Engineer and Application Security"
+              alt="Farid Firdaus | Software Engineer &amp; Application Security"
               fill
               priority
               sizes="(max-width: 768px) 256px, 320px"

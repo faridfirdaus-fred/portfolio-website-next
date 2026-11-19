@@ -69,7 +69,7 @@ export const projects: Project[] = [
   },
   {
     id: "firdauscipher",
-    title: "Firdaus Cipher Lab — Cryptographic Algorithms Suite",
+    title: "Firdaus Cipher Lab | Cryptographic Algorithms Suite",
     category: "appsec",
     badge: "Cryptography & Security Lab",
     description:
